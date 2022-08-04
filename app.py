@@ -20,7 +20,7 @@ def index():
 def callback():
     print('xxxxxx')
     body = request.get_data(as_text=True)
-    # print(body)
+    print(body)
     req = request.get_json(silent=True, force=True)
     text = req["queryResult"]["intent"]["displayName"] 
     intent = req['originalDetectIntentRequest']['payload']['data']['message']['text'] 
