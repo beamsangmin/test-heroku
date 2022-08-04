@@ -12,6 +12,7 @@ handler = WebhookHandler('277fb1c0412709857645ac19242f7be7')
       
 @app.route("/callback", methods=['POST'])
 def callback():
+    print('xxxxxx')
     body = request.get_data(as_text=True)
     # print(body)
     req = request.get_json(silent=True, force=True)
