@@ -21,7 +21,7 @@ def callback():
     reply_token = req['originalDetectIntentRequest']['payload']['data']['replyToken']
     id = req['originalDetectIntentRequest']['payload']['data']['source']['userId']
     disname = line_bot_api.get_profile(id).display_name
-    
+
     reply(intent,text,reply_token,id,disname)
 
     print('id = ' + id)
@@ -138,4 +138,4 @@ def replyKIN(intent,text,reply_token,id,disname):
         line_bot_api.reply_message(reply_token,text_message)
     
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
