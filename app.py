@@ -28,8 +28,6 @@ def callback():
     id = req['originalDetectIntentRequest']['payload']['data']['source']['userId']
     disname = line_bot_api.get_profile(id).display_name
 
-    reply(intent,text,reply_token,id,disname)
-
     print('id = ' + id)
     print('name = ' + disname)
     print('text = ' + text)
