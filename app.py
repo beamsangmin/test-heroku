@@ -2,7 +2,7 @@ from flask import *
 from linebot.models import *
 from linebot import *
 import json
-import requests
+import requests   
 
 app = Flask(__name__)
 
