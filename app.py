@@ -135,4 +135,4 @@ def replyKIN(intent,text,reply_token,id,disname):
         line_bot_api.reply_message(reply_token,text_message)
     
 if __name__ == "__main__":
-    app.run(debug=True,host='https://c0b6-110-164-182-66.ap.ngrok.io')
+    app.run(debug=True)
