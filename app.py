@@ -107,6 +107,7 @@ def replySDN(intent,text,reply_token,id,disname):
         response = requests.post(access_Token_URL, data=configure_New_Token)
         jsonResponse = json.loads(response.text)
         access_Token = jsonResponse['access_token']
+        print(access_Token)
 
         api_URL = "https://api.businesscentral.dynamics.com/v2.0/51cd216f-49b0-46d5-b6f2-dce309a29830/SDNDEV2/api/AMCO/Item/v2.0/companies"
 
@@ -114,6 +115,7 @@ def replySDN(intent,text,reply_token,id,disname):
 
         resp = requests.get(api_URL , headers=headers)
         json_result = resp.json()
+        print(json_result)
         for data in json_result['value']:
             if (data['name']) == text:
                 Display = (data['displayName'])
@@ -132,6 +134,7 @@ def replyKIN(intent,text,reply_token,id,disname):
         response = requests.post(access_Token_URL, data=configure_New_Token)
         jsonResponse = json.loads(response.text)
         access_Token = jsonResponse['access_token']
+        print(access_Token)
 
         api_URL = "https://api.businesscentral.dynamics.com/v2.0/51cd216f-49b0-46d5-b6f2-dce309a29830/SDNDEV2/api/AMCO/Item/v2.0/companies"
 
@@ -139,6 +142,7 @@ def replyKIN(intent,text,reply_token,id,disname):
 
         resp = requests.get(api_URL , headers=headers)
         json_result = resp.json()
+        print(json_result)
         for data in json_result['value']:
             if (data['name']) == text:
                 Display = (data['displayName'])
