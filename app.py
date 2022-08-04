@@ -1,8 +1,10 @@
+from flask import Flask, render_template
 from flask import *
 from linebot.models import *
 from linebot import *
 import json
 import requests   
+
 
 app = Flask(__name__)
 
@@ -10,18 +12,18 @@ app = Flask(__name__)
 line_bot_api = LineBotApi('KtzrTuJet6PYQfzQRQEnV6F6QrC8VQTH+hzLKTfpj99SxRp1vG00aidjuAHU/YLayESkb22eatO0SU/YoYxSYbpK1bEQOUITQ7o8M2yR2phcLSsiwsJxd6dnXp4s77eB1RFC1r/6nzedhhQb1uQkXwdB04t89/1O/w1cDnyilFU=')
 handler = WebhookHandler('277fb1c0412709857645ac19242f7be7')
 
-@app.route("/", methods=['GET'])
-def helloworld():
-    return 'helloworld'
-        
+@app.route('/')
+def index():
+    return render_template('index.html')
+
 @app.route("/callback", methods=['POST'])
 def callback():
     print('xxxxxx')
     body = request.get_data(as_text=True)
     # print(body)
     req = request.get_json(silent=True, force=True)
-    intent = req["queryResult"]["intent"]["displayName"] 
-    text = req['originalDetectIntentRequest']['payload']['data']['message']['text'] 
+    text = req["queryResult"]["intent"]["displayName"] 
+    intent = req['originalDetectIntentRequest']['payload']['data']['message']['text'] 
     reply_token = req['originalDetectIntentRequest']['payload']['data']['replyToken']
     id = req['originalDetectIntentRequest']['payload']['data']['source']['userId']
     disname = line_bot_api.get_profile(id).display_name
@@ -66,14 +68,15 @@ def callback():
             quit()
         
     return 'OK'
-    
+
 def reply(intent,text,reply_token,id,disname):
+    print(intent)
     if intent == 'Vendor':
-        text_message = TextSendMessage(text='Vendor List')
+        text_message = TextSendMessage(text='สวัสดี Vendor '+disname)
         line_bot_api.reply_message(reply_token,text_message)
         
     if intent == 'Customer':
-        text_message = TextSendMessage(text='Customer List')
+        text_message = TextSendMessage(text='สวัสดี Customer ' + disname)
         line_bot_api.reply_message(reply_token,text_message)
         
 def replyVendor(intent,text,reply_token,id,disname):
@@ -141,5 +144,4 @@ def replyKIN(intent,text,reply_token,id,disname):
         text_message = TextSendMessage(text="รายชื่อบริษัท : {} ".format(Display))
         line_bot_api.reply_message(reply_token,text_message)
     
-if __name__ == "__main__":
-    app.run()
+if __name__ == '__main__': app.run(debug=True)
