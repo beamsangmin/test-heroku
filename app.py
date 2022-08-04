@@ -119,7 +119,7 @@ def replySDN(intent,text,reply_token,id,disname):
         for data in json_result['value']:
             if (data['name']) == text:
                 Display = (data['displayName'])
-        text_message = TextSendMessage(text="รายชื่อบริษัท : {} ".format(Display))
+        text_message = TextSendMessage(text="รายชื่อบริษัท : " + Display)
         line_bot_api.reply_message(reply_token,text_message)
 
 def replyKIN(intent,text,reply_token,id,disname):
@@ -146,7 +146,7 @@ def replyKIN(intent,text,reply_token,id,disname):
         for data in json_result['value']:
             if (data['name']) == text:
                 Display = (data['displayName'])
-        text_message = TextSendMessage(text="รายชื่อบริษัท : {} ".format(Display))
+        text_message = TextSendMessage(text="รายชื่อบริษัท : " + Display)
         line_bot_api.reply_message(reply_token,text_message)
     
 if __name__ == '__main__': app.run(debug=True)
