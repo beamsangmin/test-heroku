@@ -58,10 +58,10 @@ def callback():
         if intent == 'requestCompanyName':
             reqCompanyName(intent,text,reply_token,id,disname)
             quit()
-        if intent == 'ReplyKIN':
+        if intent == 'KIN':
             replyKIN(intent,text,reply_token,id,disname)
             quit()
-        if intent == 'ReplySDN':
+        if intent == 'SDN':
             replySDN(intent,text,reply_token,id,disname)
             quit()
         
@@ -96,7 +96,7 @@ def reqCompanyName(intent,text,reply_token,id,disname):
         line_bot_api.reply_message(reply_token,text_message)
     
 def replySDN(intent,text,reply_token,id,disname):
-    if intent == 'ReplySDN':
+    if intent == 'SDN':
         access_Token_URL = 'https://login.microsoftonline.com/51cd216f-49b0-46d5-b6f2-dce309a29830/oauth2/v2.0/token'
         configure_New_Token= {'grant_type' : 'client_credentials',
                 'scope' : 'https://api.businesscentral.dynamics.com/.default',
@@ -121,7 +121,7 @@ def replySDN(intent,text,reply_token,id,disname):
         line_bot_api.reply_message(reply_token,text_message)
 
 def replyKIN(intent,text,reply_token,id,disname):
-    if intent == 'ReplyKIN':
+    if intent == 'KIN':
         access_Token_URL = 'https://login.microsoftonline.com/51cd216f-49b0-46d5-b6f2-dce309a29830/oauth2/v2.0/token'
         configure_New_Token= {'grant_type' : 'client_credentials',
                 'scope' : 'https://api.businesscentral.dynamics.com/.default',
