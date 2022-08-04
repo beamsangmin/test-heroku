@@ -118,7 +118,7 @@ def replySDN(intent,text,reply_token,id,disname):
         json_result = resp.json()
         print(json_result)
         for data in json_result['value']:
-            if (data['name']) == text:
+            if (data['name']) == intent:
                 Display = (data['displayName'])
         text_message = TextSendMessage(text="รายชื่อบริษัท : " + Display)
         line_bot_api.reply_message(reply_token,text_message)
@@ -146,7 +146,7 @@ def replyKIN(intent,text,reply_token,id,disname):
         json_result = resp.json()
         print(json_result)
         for data in json_result['value']:
-            if (data['name']) == text:
+            if (data['name']) == intent:
                 Display = (data['displayName'])
         text_message = TextSendMessage(text="รายชื่อบริษัท : " + Display)
         line_bot_api.reply_message(reply_token,text_message)
