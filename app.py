@@ -12,55 +12,8 @@ handler = WebhookHandler('277fb1c0412709857645ac19242f7be7')
       
 @app.route("/callback", methods=['POST'])
 def callback():
-    print('xxxxxx')
     body = request.get_data(as_text=True)
-    # print(body)
-    req = request.get_json(silent=True, force=True)
-    intent = req["queryResult"]["intent"]["displayName"] 
-    text = req['originalDetectIntentRequest']['payload']['data']['message']['text'] 
-    reply_token = req['originalDetectIntentRequest']['payload']['data']['replyToken']
-    id = req['originalDetectIntentRequest']['payload']['data']['source']['userId']
-    disname = line_bot_api.get_profile(id).display_name
-
-    reply(intent,text,reply_token,id,disname)
-
-    print('id = ' + id)
-    print('name = ' + disname)
-    print('text = ' + text)
-    print('intent = ' + intent)
-    print('reply_token = ' + reply_token)
-    print('\n')
-    
-    if (len(text)):
-        
-        if intent == 'ReplyKIN':
-            replyKIN(intent,text,reply_token,id,disname)
-            quit()
-        if intent == 'ReplySDN':
-            replySDN(intent,text,reply_token,id,disname)
-            quit()
-        if intent == 'Vendor':
-            reply(intent,text,reply_token,id,disname)
-            quit()
-        if intent == 'Customer':
-            reply(intent,text,reply_token,id,disname)
-            quit()
-        if intent == 'Vendor - Description':
-            replyVendor(intent,text,reply_token,id,disname)
-            quit()
-        if intent == 'Customer - Description':
-            replyCustomer(intent,text,reply_token,id,disname)
-            quit()
-        if intent == 'requestCompanyName':
-            reqCompanyName(intent,text,reply_token,id,disname)
-            quit()
-        if intent == 'ReplyKIN':
-            replyKIN(intent,text,reply_token,id,disname)
-            quit()
-        if intent == 'ReplySDN':
-            replySDN(intent,text,reply_token,id,disname)
-            quit()
-        
+    print(body)
     return 'OK'
     
 def reply(intent,text,reply_token,id,disname):
