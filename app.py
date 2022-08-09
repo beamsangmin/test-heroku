@@ -79,7 +79,14 @@ def reply(intent,text,reply_token,id,disname):
         line_bot_api.reply_message(reply_token,text_message)
         
     if intent == 'Customer':
-        text_message = Sender(name='สวัสดี Customer ' + disname, icon_url='https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Check_green_icon.svg/215px-Check_green_icon.svg.png?20160613122756', message='AAA',text='BBB',type='text')
+        text_message = {
+  "type": "text",
+  "text": "Hello, I am Cony!!",
+  "sender": {
+    "name": "Cony",
+    "iconUrl": "https://line.me/conyprof"
+  }
+}
         line_bot_api.reply_message(reply_token,text_message)
         
 def replyVendor(intent,text,reply_token,id,disname):
