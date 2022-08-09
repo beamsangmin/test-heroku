@@ -6,6 +6,7 @@ import json
 import requests   
 
 
+
 app = Flask(__name__)
 
 # Channel access token and Channel secret 
@@ -77,7 +78,7 @@ def reply(intent,text,reply_token,id,disname):
         line_bot_api.reply_message(reply_token,text_message)
         
     if intent == 'Customer':
-        text_message = TextSendMessage(text='สวัสดี Customer ' + disname)
+        text_message = Sender(name='สวัสดี Customer ' + disname, icon_url='https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Check_green_icon.svg/215px-Check_green_icon.svg.png?20160613122756')
         line_bot_api.reply_message(reply_token,text_message)
         
 def replyVendor(intent,text,reply_token,id,disname):
