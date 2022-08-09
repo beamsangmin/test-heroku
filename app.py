@@ -79,15 +79,31 @@ def reply(intent,text,reply_token,id,disname):
         line_bot_api.reply_message(reply_token,text_message)
         
     if intent == 'Customer':
-        text_message = {messages:{
-                    "type": "text",
-                    "text": "Hello, I am Cony!!",
-                    "sender": {
-                        "name": "Cony",
-                        "iconUrl": "https://line.me/conyprof"
-                    }
-                    }
-        }
+        text_message =TextSendMessage(
+                text='Quick reply',
+                quick_reply=QuickReply(
+                    items=[
+                        QuickReplyButton(
+                            action=PostbackAction(label="label1", data="data1")
+                        ),
+                        QuickReplyButton(
+                            action=MessageAction(label="label2", text="text2")
+                        ),
+                        QuickReplyButton(
+                            action=DatetimePickerAction(label="label3",
+                                                        data="data3",
+                                                        mode="date")
+                        ),
+                        QuickReplyButton(
+                            action=CameraAction(label="label4")
+                        ),
+                        QuickReplyButton(
+                            action=CameraRollAction(label="label5")
+                        ),
+                        QuickReplyButton(
+                            action=LocationAction(label="label6")
+                        ),
+                    ]))
         line_bot_api.reply_message(reply_token,text_message)
         
 def replyVendor(intent,text,reply_token,id,disname):
