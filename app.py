@@ -1,255 +1,157 @@
-from __future__ import unicode_literals
+from email import message
+from flask import Flask, render_template
+from flask import *
+from linebot.models import *
+from linebot import *
+import json
+import requests   
 
-import errno
-import os
-import sys
-import tempfile
-from argparse import ArgumentParser
 
-from flask import Flask, request, abort
-
-from linebot import (
-    LineBotApi, WebhookHandler
-)
-from linebot.exceptions import (
-    InvalidSignatureError
-)
-from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,
-    SourceUser, SourceGroup, SourceRoom,
-    TemplateSendMessage, ConfirmTemplate, MessageTemplateAction,
-    ButtonsTemplate, URITemplateAction, PostbackTemplateAction,
-    CarouselTemplate, CarouselColumn, PostbackEvent,
-    StickerMessage, StickerSendMessage, LocationMessage, LocationSendMessage,
-    ImageMessage, VideoMessage, AudioMessage,
-    UnfollowEvent, FollowEvent, JoinEvent, LeaveEvent, BeaconEvent
-)
 
 app = Flask(__name__)
 
-# get channel_secret and channel_access_token from your environment variable
-# channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
-# channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
-# if channel_secret is None:
-#     print('Specify LINE_CHANNEL_SECRET as environment variable.')
-#     sys.exit(1)
-# if channel_access_token is None:
-#     print('Specify LINE_CHANNEL_ACCESS_TOKEN as environment variable.')
-#     sys.exit(1)
-
+# Channel access token and Channel secret 
 line_bot_api = LineBotApi('KtzrTuJet6PYQfzQRQEnV6F6QrC8VQTH+hzLKTfpj99SxRp1vG00aidjuAHU/YLayESkb22eatO0SU/YoYxSYbpK1bEQOUITQ7o8M2yR2phcLSsiwsJxd6dnXp4s77eB1RFC1r/6nzedhhQb1uQkXwdB04t89/1O/w1cDnyilFU=')
 handler = WebhookHandler('277fb1c0412709857645ac19242f7be7')
 
-static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
-
-
-# function for create tmp dir for download content
-def make_static_tmp_dir():
-    try:
-        os.makedirs(static_tmp_path)
-    except OSError as exc:
-        if exc.errno == errno.EEXIST and os.path.isdir(static_tmp_path):
-            pass
-        else:
-            raise
-
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route("/callback", methods=['POST'])
 def callback():
-    # get X-Line-Signature header value
-    signature = request.headers['host']
-
-    # get request body as text
+    print('xxxxxx')
     body = request.get_data(as_text=True)
-    print("Request body: " + body)
-    app.logger.info("Request body: " + body)
+    print(body)
+    req = request.get_json(silent=True, force=True)
+    text = req["queryResult"]["intent"]["displayName"] 
+    intent = req['originalDetectIntentRequest']['payload']['data']['message']['text'] 
+    reply_token = req['originalDetectIntentRequest']['payload']['data']['replyToken']
+    id = req['originalDetectIntentRequest']['payload']['data']['source']['userId']
+    disname = line_bot_api.get_profile(id).display_name
 
-    # handle webhook body
-    try:
-        handler.handle(body, signature)
-    except InvalidSignatureError:
-        abort(400)
-
+    print('id = ' + id)
+    print('name = ' + disname)
+    print('text = ' + text)
+    print('intent = ' + intent)
+    print('reply_token = ' + reply_token)
+    print('\n')
+    
+    if (len(text)):
+        
+        if intent == 'ReplyKIN':
+            replyKIN(intent,text,reply_token,id,disname)
+            quit()
+        if intent == 'ReplySDN':
+            replySDN(intent,text,reply_token,id,disname)
+            quit()
+        if intent == 'Vendor':
+            reply(intent,text,reply_token,id,disname)
+            quit()
+        if intent == 'Customer':
+            reply(intent,text,reply_token,id,disname)
+            quit()
+        if intent == 'Vendor - Description':
+            replyVendor(intent,text,reply_token,id,disname)
+            quit()
+        if intent == 'Customer - Description':
+            replyCustomer(intent,text,reply_token,id,disname)
+            quit()
+        if intent == 'requestCompanyName':
+            reqCompanyName(intent,text,reply_token,id,disname)
+            quit()
+        if intent == 'KIN':
+            replyKIN(intent,text,reply_token,id,disname)
+            quit()
+        if intent == 'SDN':
+            replySDN(intent,text,reply_token,id,disname)
+            quit()
+        
     return 'OK'
 
+def reply(intent,text,reply_token,id,disname):
+    # print(intent)
+    # text_message = StickerMessage(package_id=8525,sticker_id=16581292)
+    # line_bot_api.reply_message(reply_token,text_message)
 
-@handler.add(MessageEvent, message=TextMessage)
-def handle_text_message(event):
-    text = event.message.text
-    print(text)
+    if intent == 'Vendor':
+        text_message = TextSendMessage(text='สวัสดี คุณ Vendor '+disname)
+        line_bot_api.reply_message(reply_token,text_message)
+        
+    if intent == 'Customer':
+        text_message =TextSendMessage(
+                text='สวัสดี คุณ Customer '+disname)
+        line_bot_api.reply_message(reply_token,text_message)
+        
+def replyVendor(intent,text,reply_token,id,disname):
+    if intent == 'Vendor - Description':
+        text_message = TextSendMessage(text='Vendor Description')
+        line_bot_api.reply_message(reply_token,text_message)
 
-    if text == 'Customer':
-        if isinstance(event.source, SourceUser):
-            profile = line_bot_api.get_profile(event.source.user_id)
-            line_bot_api.reply_message(
-                event.reply_token, [
-                    TextSendMessage(
-                        text='Display name: ' + profile.display_name
-                    ),
-                    TextSendMessage(
-                        text='Status message: ' + profile.status_message
-                    )
-                ]
-            )
-        else:
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextMessage(text="Bot can't use profile API without user ID"))
-    elif text == 'Vendor':
-        if isinstance(event.source, SourceGroup):
-            line_bot_api.reply_message(
-                event.reply_token, TextMessage(text='Leaving group'))
-            line_bot_api.leave_group(event.source.group_id)
-        elif isinstance(event.source, SourceRoom):
-            line_bot_api.reply_message(
-                event.reply_token, TextMessage(text='Leaving group'))
-            line_bot_api.leave_room(event.source.room_id)
-        else:
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextMessage(text="Bot can't leave from 1:1 chat"))
-    elif text == 'confirm':
-        confirm_template = ConfirmTemplate(text='Do it?', actions=[
-            MessageTemplateAction(label='Yes', text='Yes!'),
-            MessageTemplateAction(label='No', text='No!'),
-        ])
-        template_message = TemplateSendMessage(
-            alt_text='Confirm alt text', template=confirm_template)
-        line_bot_api.reply_message(event.reply_token, template_message)
-    elif text == 'buttons':
-        buttons_template = ButtonsTemplate(
-            title='My buttons sample', text='Hello, my buttons', actions=[
-                URITemplateAction(
-                    label='Go to line.me', uri='https://line.me'),
-                PostbackTemplateAction(label='ping', data='ping'),
-                PostbackTemplateAction(
-                    label='ping with text', data='ping',
-                    text='ping'),
-                MessageTemplateAction(label='Translate Rice', text='米')
-            ])
-        template_message = TemplateSendMessage(
-            alt_text='Buttons alt text', template=buttons_template)
-        line_bot_api.reply_message(event.reply_token, template_message)
-    elif text == 'carousel':
-        carousel_template = CarouselTemplate(columns=[
-            CarouselColumn(text='hoge1', title='fuga1', actions=[
-                URITemplateAction(
-                    label='Go to line.me', uri='https://line.me'),
-                PostbackTemplateAction(label='ping', data='ping')
-            ]),
-            CarouselColumn(text='hoge2', title='fuga2', actions=[
-                PostbackTemplateAction(
-                    label='ping with text', data='ping',
-                    text='ping'),
-                MessageTemplateAction(label='Translate Rice', text='米')
-            ]),
-        ])
-        template_message = TemplateSendMessage(
-            alt_text='Buttons alt text', template=carousel_template)
-        line_bot_api.reply_message(event.reply_token, template_message)
-    elif text == 'imagemap':
-        pass
-    else:
-        line_bot_api.reply_message(
-            event.reply_token, TextSendMessage(text=event.message.text))
+def replyCustomer(intent,text,reply_token,id,disname):
+    if intent == 'Customer - Description':
+        text_message = TextSendMessage(text='Customer Description')
+        line_bot_api.reply_message(reply_token,text_message)       
 
+def reqCompanyName(intent,text,reply_token,id,disname):
+    if intent == 'requestCompanyName':
+        text_message = TextSendMessage(text='Please enter company code')
+        line_bot_api.reply_message(reply_token,text_message)
+    
+def replySDN(intent,text,reply_token,id,disname):
+    if intent == 'SDN':
+        access_Token_URL = 'https://login.microsoftonline.com/51cd216f-49b0-46d5-b6f2-dce309a29830/oauth2/v2.0/token'
+        configure_New_Token= {'grant_type' : 'client_credentials',
+                'scope' : 'https://api.businesscentral.dynamics.com/.default',
+                'client_id' : '2bb54e51-334d-4848-94cc-e44c9cc3f54a',
+                'client_secret' : 'Pg38Q~Ic5i2oJncaQs~SwRAPzmnjKSURqMynydjj'
+            }
 
-@handler.add(MessageEvent, message=LocationMessage)
-def handle_location_message(event):
-    line_bot_api.reply_message(
-        event.reply_token,
-        LocationSendMessage(
-            title=event.message.title, address=event.message.address,
-            latitude=event.message.latitude, longitude=event.message.longitude
-        )
-    )
+        response = requests.post(access_Token_URL, data=configure_New_Token)
+        jsonResponse = json.loads(response.text)
+        access_Token = jsonResponse['access_token']
+        Display =''
+        print(access_Token)
 
+        api_URL = "https://api.businesscentral.dynamics.com/v2.0/51cd216f-49b0-46d5-b6f2-dce309a29830/SDNDEV2/api/AMCO/Item/v2.0/companies"
 
-@handler.add(MessageEvent, message=StickerMessage)
-def handle_sticker_message(event):
-    line_bot_api.reply_message(
-        event.reply_token,
-        StickerSendMessage(
-            package_id=event.message.package_id,
-            sticker_id=event.message.sticker_id)
-    )
+        headers = {'Authorization' : 'Bearer '+access_Token}
 
+        resp = requests.get(api_URL , headers=headers)
+        json_result = resp.json()
+        print(json_result)
+        for data in json_result['value']:
+            if (data['name']) == intent:
+                Display = (data['displayName'])
+        text_message = TextSendMessage(text="รายชื่อบริษัท : " + Display)
+        line_bot_api.reply_message(reply_token,text_message)
 
-# Other Message Type
-@handler.add(MessageEvent, message=(ImageMessage, VideoMessage, AudioMessage))
-def handle_content_message(event):
-    if isinstance(event.message, ImageMessage):
-        ext = 'jpg'
-    elif isinstance(event.message, VideoMessage):
-        ext = 'mp4'
-    elif isinstance(event.message, AudioMessage):
-        ext = 'm4a'
-    else:
-        return
+def replyKIN(intent,text,reply_token,id,disname):
+    if intent == 'KIN':
+        access_Token_URL = 'https://login.microsoftonline.com/51cd216f-49b0-46d5-b6f2-dce309a29830/oauth2/v2.0/token'
+        configure_New_Token= {'grant_type' : 'client_credentials',
+                'scope' : 'https://api.businesscentral.dynamics.com/.default',
+                'client_id' : '2bb54e51-334d-4848-94cc-e44c9cc3f54a',
+                'client_secret' : 'Pg38Q~Ic5i2oJncaQs~SwRAPzmnjKSURqMynydjj'
+            }
 
-    message_content = line_bot_api.get_message_content(event.message.id)
-    with tempfile.NamedTemporaryFile(dir=static_tmp_path, prefix=ext + '-', delete=False) as tf:
-        for chunk in message_content.iter_content():
-            tf.write(chunk)
-        tempfile_path = tf.name
+        response = requests.post(access_Token_URL, data=configure_New_Token)
+        jsonResponse = json.loads(response.text)
+        access_Token = jsonResponse['access_token']
+        Display =''
+        print(access_Token)
 
-    dist_path = tempfile_path + '.' + ext
-    dist_name = os.path.basename(dist_path)
-    os.rename(tempfile_path, dist_path)
+        api_URL = "https://api.businesscentral.dynamics.com/v2.0/51cd216f-49b0-46d5-b6f2-dce309a29830/SDNDEV2/api/AMCO/Item/v2.0/companies"
 
-    line_bot_api.reply_message(
-        event.reply_token, [
-            TextSendMessage(text='Save content.'),
-            TextSendMessage(text=request.host_url + os.path.join('static', 'tmp', dist_name))
-        ])
+        headers = {'Authorization' : 'Bearer '+access_Token}
 
-
-@handler.add(FollowEvent)
-def handle_follow(event):
-    line_bot_api.reply_message(
-        event.reply_token, TextSendMessage(text='Got follow event'))
-
-
-@handler.add(UnfollowEvent)
-def handle_unfollow():
-    app.logger.info("Got Unfollow event")
-
-
-@handler.add(JoinEvent)
-def handle_join(event):
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text='Joined this ' + event.source.type))
-
-
-@handler.add(LeaveEvent)
-def handle_leave():
-    app.logger.info("Got leave event")
-
-
-@handler.add(PostbackEvent)
-def handle_postback(event):
-    if event.postback.data == 'ping':
-        line_bot_api.reply_message(
-            event.reply_token, TextSendMessage(text='pong'))
-
-
-@handler.add(BeaconEvent)
-def handle_beacon(event):
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text='Got beacon event. hwid=' + event.beacon.hwid))
-
-
-if __name__ == "__main__":
-    arg_parser = ArgumentParser(
-        usage='Usage: python ' + __file__ + ' [--port <port>] [--help]'
-    )
-    arg_parser.add_argument('-p', '--port', default=8000, help='port')
-    arg_parser.add_argument('-d', '--debug', default=False, help='debug')
-    options = arg_parser.parse_args()
-
-    # create tmp dir for download content
-    make_static_tmp_dir()
-
-    app.run(debug=options.debug, port=options.port)
+        resp = requests.get(api_URL , headers=headers)
+        json_result = resp.json()
+        print(json_result)
+        for data in json_result['value']:
+            if (data['name']) == intent:
+                Display = (data['displayName'])
+        text_message = TextSendMessage(text="รายชื่อบริษัท : " + Display)
+        line_bot_api.reply_message(reply_token,text_message)
+    
+if __name__ == '__main__': app.run(debug=True)
