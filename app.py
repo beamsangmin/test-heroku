@@ -1,3 +1,4 @@
+from email import message
 from flask import Flask, render_template
 from flask import *
 from linebot.models import *
@@ -78,7 +79,7 @@ def reply(intent,text,reply_token,id,disname):
         line_bot_api.reply_message(reply_token,text_message)
         
     if intent == 'Customer':
-        text_message = Sender(name='สวัสดี Customer ' + disname, icon_url='https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Check_green_icon.svg/215px-Check_green_icon.svg.png?20160613122756')
+        text_message = Sender(name='สวัสดี Customer ' + disname, icon_url='https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Check_green_icon.svg/215px-Check_green_icon.svg.png?20160613122756', message='AAA',text='BBB')
         line_bot_api.reply_message(reply_token,text_message)
         
 def replyVendor(intent,text,reply_token,id,disname):
