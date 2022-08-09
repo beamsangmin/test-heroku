@@ -57,7 +57,7 @@ def make_static_tmp_dir():
 @app.route("/callback", methods=['POST'])
 def callback():
     # get X-Line-Signature header value
-    #signature = request.headers['X-Line-Signature']
+    signature = request.headers['X-Line-Signature']
 
     # get request body as text
     body = request.get_data(as_text=True)
@@ -65,7 +65,7 @@ def callback():
 
     # handle webhook body
     try:
-        handler.handle(body)
+        handler.handle(body, signature)
     except InvalidSignatureError:
         abort(400)
 
