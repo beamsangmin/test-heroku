@@ -30,51 +30,53 @@ def callback():
     id = req['originalDetectIntentRequest']['payload']['data']['source']['userId']
     disname = line_bot_api.get_profile(id).display_name
 
-    print('id = ' + id)
-    print('name = ' + disname)
-    print('text = ' + inputmessage)
-    print('intent = ' + intenttext)
-    print('reply_token = ' + reply_token)
-    print('\n')
+    retmessage = 'id = ' + id
+    retmessage = retmessage + '\nname = ' + disname
+    retmessage = retmessage + '\ntext = ' + inputmessage
+    retmessage = retmessage + '\nintent = ' + intenttext
+    retmessage = retmessage + '\nreply_token = ' + reply_token
+    retmessage = retmessage + '\n'
     
-    if (len(intenttext)):
-        reply(inputmessage,reply_token,id,disname)
+    print(retmessage)
+
+    if (len(inputmessage)):
+        reply(inputmessage,retmessage,reply_token,id,disname)
         quit()
-        if intent == 'ReplyKIN':
+        if inputmessage == 'ReplyKIN':
             replyKIN(intent,text,reply_token,id,disname)
             quit()
-        if intent == 'ReplySDN':
+        if inputmessage == 'ReplySDN':
             replySDN(intent,text,reply_token,id,disname)
             quit()
-        if intent == 'Vendor':
+        if inputmessage == 'Vendor':
             reply(intent,text,reply_token,id,disname)
             quit()
-        if intent == 'Customer':
+        if inputmessage == 'Customer':
             reply(intent,text,reply_token,id,disname)
             quit()
-        if intent == 'Vendor - Description':
+        if inputmessage == 'Vendor - Description':
             replyVendor(intent,text,reply_token,id,disname)
             quit()
-        if intent == 'Customer - Description':
+        if inputmessage == 'Customer - Description':
             replyCustomer(intent,text,reply_token,id,disname)
             quit()
-        if intent == 'requestCompanyName':
+        if inputmessage == 'requestCompanyName':
             reqCompanyName(intent,text,reply_token,id,disname)
             quit()
-        if intent == 'KIN':
+        if inputmessage == 'KIN':
             replyKIN(intent,text,reply_token,id,disname)
             quit()
-        if intent == 'SDN':
+        if inputmessage == 'SDN':
             replySDN(intent,text,reply_token,id,disname)
             quit()
         
     return 'OK'
 
-def reply(inputmessage,reply_token,id,disname):
+def reply(inputmessage,retmessage,reply_token,id,disname):
     # print(intent)
     # text_message = StickerMessage(package_id=8525,sticker_id=16581292)
     # line_bot_api.reply_message(reply_token,text_message)
-    text_message = TextSendMessage(text='สวัสดี คุณ ตอบว่า '+disname + ' ' +inputmessage)
+    text_message = TextSendMessage(text='สวัสดี คุณ ตอบว่า '+disname + ' ' +inputmessage + '\n' + retmessage)
     line_bot_api.reply_message(reply_token,text_message)
 
     if inputmessage == 'Vendor':
