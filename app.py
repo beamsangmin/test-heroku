@@ -20,7 +20,7 @@ def index():
 
 @app.route("/callback", methods=['POST'])
 def callback():
-    print('xxxxxx')
+    fulfillmentText =''
     body = request.get_data(as_text=True)
     print(body)
     req = request.get_json(silent=True, force=True)
@@ -39,8 +39,7 @@ def callback():
     retmessage = retmessage + '\nreply_token = ' + reply_token
     retmessage = retmessage + '\nfullfillment = ' + fulfillmentText
     retmessage = retmessage + '\n'
-    
-    print(retmessage)
+
 
     if (len(inputmessage)):
         reply(inputmessage,retmessage,reply_token,id,disname)
