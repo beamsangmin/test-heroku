@@ -25,6 +25,7 @@ def callback():
     print(body)
     req = request.get_json(silent=True, force=True)
     intenttext = req["queryResult"]["intent"]["displayName"] 
+    fullfillmenttext = req["queryResult"]["intent"]["fulfillmentText"] 
     inputmessage = req['originalDetectIntentRequest']['payload']['data']['message']['text'] 
     reply_token = req['originalDetectIntentRequest']['payload']['data']['replyToken']
     id = req['originalDetectIntentRequest']['payload']['data']['source']['userId']
@@ -35,6 +36,7 @@ def callback():
     retmessage = retmessage + '\ntext = ' + inputmessage
     retmessage = retmessage + '\nintent = ' + intenttext
     retmessage = retmessage + '\nreply_token = ' + reply_token
+    retmessage = retmessage + '\nfullfillment = ' + fullfillmenttext
     retmessage = retmessage + '\n'
     
     print(retmessage)
