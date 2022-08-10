@@ -38,7 +38,8 @@ def callback():
     print('\n')
     
     if (len(text)):
-        
+        reply(intent,text,reply_token,id,disname)
+        quit()
         if intent == 'ReplyKIN':
             replyKIN(intent,text,reply_token,id,disname)
             quit()
@@ -73,6 +74,8 @@ def reply(intent,text,reply_token,id,disname):
     # print(intent)
     # text_message = StickerMessage(package_id=8525,sticker_id=16581292)
     # line_bot_api.reply_message(reply_token,text_message)
+    text_message = TextSendMessage(text='สวัสดี คุณ ตอบว่า '+disname)
+    line_bot_api.reply_message(reply_token,intent)
 
     if intent == 'Vendor':
         text_message = TextSendMessage(text='สวัสดี คุณ Vendor '+disname)
