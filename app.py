@@ -74,8 +74,8 @@ def reply(intent,text,reply_token,id,disname):
     # print(intent)
     # text_message = StickerMessage(package_id=8525,sticker_id=16581292)
     # line_bot_api.reply_message(reply_token,text_message)
-    text_message = TextSendMessage(text='สวัสดี คุณ ตอบว่า '+disname)
-    line_bot_api.reply_message(reply_token,intent)
+    text_message = TextSendMessage(text='สวัสดี คุณ ตอบว่า '+disname + ' ' +intent)
+    line_bot_api.reply_message(reply_token,text_message)
 
     if intent == 'Vendor':
         text_message = TextSendMessage(text='สวัสดี คุณ Vendor '+disname)
