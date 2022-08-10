@@ -24,21 +24,21 @@ def callback():
     body = request.get_data(as_text=True)
     print(body)
     req = request.get_json(silent=True, force=True)
-    text = req["queryResult"]["intent"]["displayName"] 
-    intent = req['originalDetectIntentRequest']['payload']['data']['message']['text'] 
+    intenttext = req["queryResult"]["intent"]["displayName"] 
+    inputmessage = req['originalDetectIntentRequest']['payload']['data']['message']['text'] 
     reply_token = req['originalDetectIntentRequest']['payload']['data']['replyToken']
     id = req['originalDetectIntentRequest']['payload']['data']['source']['userId']
     disname = line_bot_api.get_profile(id).display_name
 
     print('id = ' + id)
     print('name = ' + disname)
-    print('text = ' + text)
-    print('intent = ' + intent)
+    print('text = ' + inputmessage)
+    print('intent = ' + intenttext)
     print('reply_token = ' + reply_token)
     print('\n')
     
-    if (len(text)):
-        reply(intent,text,reply_token,id,disname)
+    if (len(intenttext)):
+        reply(inputmessage,reply_token,id,disname)
         quit()
         if intent == 'ReplyKIN':
             replyKIN(intent,text,reply_token,id,disname)
@@ -70,39 +70,39 @@ def callback():
         
     return 'OK'
 
-def reply(intent,text,reply_token,id,disname):
+def reply(inputmessage,reply_token,id,disname):
     # print(intent)
     # text_message = StickerMessage(package_id=8525,sticker_id=16581292)
     # line_bot_api.reply_message(reply_token,text_message)
-    text_message = TextSendMessage(text='สวัสดี คุณ ตอบว่า '+disname + ' ' +intent)
+    text_message = TextSendMessage(text='สวัสดี คุณ ตอบว่า '+disname + ' ' +inputmessage)
     line_bot_api.reply_message(reply_token,text_message)
 
-    if intent == 'Vendor':
+    if inputmessage == 'Vendor':
         text_message = TextSendMessage(text='สวัสดี คุณ Vendor '+disname)
         line_bot_api.reply_message(reply_token,text_message)
         
-    if intent == 'Customer':
+    if inputmessage == 'Customer':
         text_message =TextSendMessage(
                 text='สวัสดี คุณ Customer '+disname)
         line_bot_api.reply_message(reply_token,text_message)
         
-def replyVendor(intent,text,reply_token,id,disname):
-    if intent == 'Vendor - Description':
+def replyVendor(inputmessage,intentText,reply_token,id,disname):
+    if intentText == 'Vendor - Description':
         text_message = TextSendMessage(text='Vendor Description')
         line_bot_api.reply_message(reply_token,text_message)
 
-def replyCustomer(intent,text,reply_token,id,disname):
-    if intent == 'Customer - Description':
+def replyCustomer(inputmessage,intentText,reply_token,id,disname):
+    if intentText == 'Customer - Description':
         text_message = TextSendMessage(text='Customer Description')
         line_bot_api.reply_message(reply_token,text_message)       
 
-def reqCompanyName(intent,text,reply_token,id,disname):
-    if intent == 'requestCompanyName':
+def reqCompanyName(inputmessage,intentText,reply_token,id,disname):
+    if intentText == 'requestCompanyName':
         text_message = TextSendMessage(text='Please enter company code')
         line_bot_api.reply_message(reply_token,text_message)
     
-def replySDN(intent,text,reply_token,id,disname):
-    if intent == 'SDN':
+def replySDN(inputmessage,reply_token,id,disname):
+    if inputmessage == 'SDN':
         access_Token_URL = 'https://login.microsoftonline.com/51cd216f-49b0-46d5-b6f2-dce309a29830/oauth2/v2.0/token'
         configure_New_Token= {'grant_type' : 'client_credentials',
                 'scope' : 'https://api.businesscentral.dynamics.com/.default',
@@ -129,8 +129,8 @@ def replySDN(intent,text,reply_token,id,disname):
         text_message = TextSendMessage(text="รายชื่อบริษัท : " + Display)
         line_bot_api.reply_message(reply_token,text_message)
 
-def replyKIN(intent,text,reply_token,id,disname):
-    if intent == 'KIN':
+def replyKIN(inputmessage,reply_token,id,disname):
+    if inputmessage == 'KIN':
         access_Token_URL = 'https://login.microsoftonline.com/51cd216f-49b0-46d5-b6f2-dce309a29830/oauth2/v2.0/token'
         configure_New_Token= {'grant_type' : 'client_credentials',
                 'scope' : 'https://api.businesscentral.dynamics.com/.default',
