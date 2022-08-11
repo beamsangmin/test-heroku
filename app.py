@@ -156,24 +156,11 @@ def replyKIN(inputmessage,retmessage,reply_token,id,disname):
         json_result = resp.json()
         print(json_result)
 
-        print(list(filter(lambda x: x['name'] == inputmessage, json_result['value'])))
-        # Transform json input to python objects
-        input_dict = json.loads(json.dumps(json_result['value']))
-
-        # Filter python objects with list comprehensions
-        output_dict = [x for x in input_dict if x['name'] == inputmessage]
-
-        # Transform python object back into json
-        output_json = json.dumps(output_dict)
-        print(output_json)
-        # for buff in output_json:
-        #     print(buff)
-        #     # Display = buff['displayName']
-            
-        #     if (data['name']) == inputmessage:
-            
-
-        text_message = TextSendMessage(text="รายชื่อบริษัท : " + Display+ '\n' + retmessage)
+        for data in json_result['value']:
+            if (data['name']) == inputmessage:
+                Display = (data['displayName'])
+                
+        text_message = TextSendMessage(text="รายชื่อบริษัท : " + Display + '\n' + retmessage)
         line_bot_api.reply_message(reply_token,text_message)
     
 if __name__ == '__main__': app.run(debug=True)
