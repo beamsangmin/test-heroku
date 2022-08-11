@@ -155,6 +155,8 @@ def replyKIN(inputmessage,retmessage,reply_token,id,disname):
         resp = requests.get(api_URL , headers=headers)
         json_result = resp.json()
         print(json_result)
+
+        print(list(filter(lambda x: x['name'] == inputmessage, json_result['value'])))
         # Transform json input to python objects
         input_dict = json.loads(json.dumps(json_result['value']))
 
@@ -164,9 +166,9 @@ def replyKIN(inputmessage,retmessage,reply_token,id,disname):
         # Transform python object back into json
         output_json = json.dumps(output_dict)
         print(output_json)
-        for buff in output_json:
-            print(buff)
-            # Display = buff['displayName']
+        # for buff in output_json:
+        #     print(buff)
+        #     # Display = buff['displayName']
             
         #     if (data['name']) == inputmessage:
             
