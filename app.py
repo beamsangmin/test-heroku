@@ -166,7 +166,7 @@ def replyKIN(inputmessage,retmessage,reply_token,id,disname):
         print(output_json)
         for buff in output_json:
             print(buff)
-            Display = buff['displayName']
+            # Display = buff['displayName']
             
         #     if (data['name']) == inputmessage:
             
