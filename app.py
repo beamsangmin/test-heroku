@@ -165,8 +165,11 @@ def replyKIN(inputmessage,retmessage,reply_token,id,disname):
         output_json = json.dumps(output_dict)
         print(output_json)
         for buff in output_json:
+            print(buff)
+            Display = buff['displayName']
+            
         #     if (data['name']) == inputmessage:
-            Display = (buff['displayName'])
+            
 
         text_message = TextSendMessage(text="รายชื่อบริษัท : " + Display+ '\n' + retmessage)
         line_bot_api.reply_message(reply_token,text_message)
