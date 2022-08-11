@@ -5,6 +5,7 @@ from linebot.models import *
 from linebot import *
 import json
 import requests   
+from requests.structures import CaseInsensitiveDict
 
 
 
@@ -158,7 +159,7 @@ def replyKIN(inputmessage,retmessage,reply_token,id,disname):
         input_dict = json.loads(json.dumps(json_result))
 
         # Filter python objects with list comprehensions
-        output_dict = [x for x in input_dict if x[2] == inputmessage]
+        output_dict = [x for x in input_dict if x[3] == inputmessage]
 
         # Transform python object back into json
         output_json = json.dumps(output_dict)
