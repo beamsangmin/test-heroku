@@ -42,34 +42,34 @@ def callback():
 
 
     if (len(inputmessage)):
-        reply(inputmessage,retmessage,reply_token,id,disname)
-        quit()
+        # reply(inputmessage,retmessage,reply_token,id,disname)
+        # quit()
         if inputmessage == 'ReplyKIN':
-            replyKIN(intent,text,reply_token,id,disname)
+            replyKIN(inputmessage,retmessage,reply_token,id,disname)
             quit()
         if inputmessage == 'ReplySDN':
-            replySDN(intent,text,reply_token,id,disname)
+            replySDN(inputmessage,retmessage,reply_token,id,disname)
             quit()
         if inputmessage == 'Vendor':
-            reply(intent,text,reply_token,id,disname)
+            reply(inputmessage,retmessage,reply_token,id,disname)
             quit()
         if inputmessage == 'Customer':
-            reply(intent,text,reply_token,id,disname)
+            reply(inputmessage,retmessage,reply_token,id,disname)
             quit()
         if inputmessage == 'Vendor - Description':
-            replyVendor(intent,text,reply_token,id,disname)
+            replyVendor(inputmessage,retmessage,reply_token,id,disname)
             quit()
         if inputmessage == 'Customer - Description':
-            replyCustomer(intent,text,reply_token,id,disname)
+            replyCustomer(inputmessage,retmessage,reply_token,id,disname)
             quit()
         if inputmessage == 'requestCompanyName':
-            reqCompanyName(intent,text,reply_token,id,disname)
+            reqCompanyName(inputmessage,retmessage,reply_token,id,disname)
             quit()
         if inputmessage == 'KIN':
-            replyKIN(intent,text,reply_token,id,disname)
+            replyKIN(inputmessage,retmessage,reply_token,id,disname)
             quit()
         if inputmessage == 'SDN':
-            replySDN(intent,text,reply_token,id,disname)
+            replySDN(inputmessage,retmessage,reply_token,id,disname)
             quit()
         
     return 'OK'
@@ -82,30 +82,29 @@ def reply(inputmessage,retmessage,reply_token,id,disname):
     line_bot_api.reply_message(reply_token,text_message)
 
     if inputmessage == 'Vendor':
-        text_message = TextSendMessage(text='สวัสดี คุณ Vendor '+disname)
+        text_message = TextSendMessage(text='สวัสดี คุณ ตอบว่า '+disname + ' ' +inputmessage + '\n' + retmessage)
         line_bot_api.reply_message(reply_token,text_message)
         
     if inputmessage == 'Customer':
-        text_message =TextSendMessage(
-                text='สวัสดี คุณ Customer '+disname)
+        text_message =TextSendMessage(text='สวัสดี คุณ ตอบว่า '+disname + ' ' +inputmessage + '\n' + retmessage)
         line_bot_api.reply_message(reply_token,text_message)
         
-def replyVendor(inputmessage,intentText,reply_token,id,disname):
-    if intentText == 'Vendor - Description':
-        text_message = TextSendMessage(text='Vendor Description')
+def replyVendor(inputmessage,retmessage,reply_token,id,disname):
+    if inputmessage == 'Vendor - Description':
+        text_message = TextSendMessage(text='Vendor Description'+ '\n' + retmessage)
         line_bot_api.reply_message(reply_token,text_message)
 
-def replyCustomer(inputmessage,intentText,reply_token,id,disname):
-    if intentText == 'Customer - Description':
-        text_message = TextSendMessage(text='Customer Description')
+def replyCustomer(inputmessage,retmessage,reply_token,id,disname):
+    if inputmessage == 'Customer - Description':
+        text_message = TextSendMessage(text='Customer Description'+ '\n' + retmessage)
         line_bot_api.reply_message(reply_token,text_message)       
 
-def reqCompanyName(inputmessage,intentText,reply_token,id,disname):
-    if intentText == 'requestCompanyName':
-        text_message = TextSendMessage(text='Please enter company code')
+def reqCompanyName(inputmessage,retmessage,reply_token,id,disname):
+    if inputmessage == 'requestCompanyName':
+        text_message = TextSendMessage(text='Please enter company code'+ '\n' + retmessage)
         line_bot_api.reply_message(reply_token,text_message)
     
-def replySDN(inputmessage,reply_token,id,disname):
+def replySDN(inputmessage,retmessage,reply_token,id,disname):
     if inputmessage == 'SDN':
         access_Token_URL = 'https://login.microsoftonline.com/51cd216f-49b0-46d5-b6f2-dce309a29830/oauth2/v2.0/token'
         configure_New_Token= {'grant_type' : 'client_credentials',
@@ -130,10 +129,10 @@ def replySDN(inputmessage,reply_token,id,disname):
         for data in json_result['value']:
             if (data['name']) == intent:
                 Display = (data['displayName'])
-        text_message = TextSendMessage(text="รายชื่อบริษัท : " + Display)
+        text_message = TextSendMessage(text="รายชื่อบริษัท : " + Display + '\n' + retmessage)
         line_bot_api.reply_message(reply_token,text_message)
 
-def replyKIN(inputmessage,reply_token,id,disname):
+def replyKIN(inputmessage,retmessage,reply_token,id,disname):
     if inputmessage == 'KIN':
         access_Token_URL = 'https://login.microsoftonline.com/51cd216f-49b0-46d5-b6f2-dce309a29830/oauth2/v2.0/token'
         configure_New_Token= {'grant_type' : 'client_credentials',
@@ -158,7 +157,7 @@ def replyKIN(inputmessage,reply_token,id,disname):
         for data in json_result['value']:
             if (data['name']) == intent:
                 Display = (data['displayName'])
-        text_message = TextSendMessage(text="รายชื่อบริษัท : " + Display)
+        text_message = TextSendMessage(text="รายชื่อบริษัท : " + Display+ '\n' + retmessage)
         line_bot_api.reply_message(reply_token,text_message)
     
 if __name__ == '__main__': app.run(debug=True)
