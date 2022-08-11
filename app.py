@@ -157,6 +157,8 @@ def replyKIN(inputmessage,retmessage,reply_token,id,disname):
         print(json_result)
         # Transform json input to python objects
         input_dict = json.loads(json.dumps(json_result))
+        for x in input_dict:
+            print(x)
 
         # Filter python objects with list comprehensions
         output_dict = [x for x in input_dict if x[3] == inputmessage]
