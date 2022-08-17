@@ -148,7 +148,7 @@ def replyKIN(inputmessage,retmessage,reply_token,id,disname):
         Display =''
         print(access_Token)
 
-        api_URL = "https://api.businesscentral.dynamics.com/v2.0/51cd216f-49b0-46d5-b6f2-dce309a29830/SDNDEV2/api/AMCO/Item/v2.0/companies"
+        api_URL = "https://api.businesscentral.dynamics.com/v2.0/51cd216f-49b0-46d5-b6f2-dce309a29830/SDNDEV2/api/AMCO/Item/v2.0/companies(01df9dbb-6b35-ec11-a459-0022485576e5)/ItemList"
 
         headers = {'Authorization' : 'Bearer '+access_Token}
 
@@ -157,8 +157,7 @@ def replyKIN(inputmessage,retmessage,reply_token,id,disname):
         print(json_result)
 
         for data in json_result['value']:
-            if (data['name']) == inputmessage:
-                Display = (data['displayName'])
+                Display = Display + (data['itemName']) + '\n'
                 
         text_message = TextSendMessage(text="รายชื่อบริษัท : " + Display + '\n' + retmessage)
         line_bot_api.reply_message(reply_token,text_message)
