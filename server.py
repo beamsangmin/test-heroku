@@ -258,9 +258,9 @@ class ChunkedHTTPRequestHandler(BaseHTTPRequestHandler):
 # Define and parse the command line arguments
 cli = ArgumentParser(description='Example Python Application')
 cli.add_argument(
-    "-p", "--port", type=int, metavar="PORT", dest="port", default=8000)
+    "-p", "--port", type=int, metavar="80", dest="port", default=8000)
 cli.add_argument(
-    "--host", type=str, metavar="HOST", dest="host", default="localhost")
+    "--host", type=str, metavar="testabbe.herokuapp.com", dest="host", default="localhost")
 arguments = cli.parse_args()
 
 # If the module is invoked directly, initialize the application
